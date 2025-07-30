@@ -45,8 +45,8 @@ A full-stack, plug-and-play customer support chat application built with Next.js
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/lyzr-chat-support.git
-   cd lyzr-chat-support
+   git clone https://github.com/AJAmit17/lyzr-customer-support-agent.git
+   cd lyzr-customer-support-agent
    ```
 
 2. **Install dependencies**
