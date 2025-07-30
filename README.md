@@ -129,9 +129,9 @@ A full-stack, plug-and-play customer support chat application built with Next.js
 
 ```html
 <script
-  src="https://yourdomain.com/widget/chat.js"
+  src="https://lyzr-customer-support-agent.vercel.app/widget/chat.js"
   data-agent-id="your-agent-id"
-  data-api-url="https://yourdomain.com"
+  data-api-url="https://lyzr-customer-support-agent.vercel.app"
   data-title="Customer Support"
   data-subtitle="How can we help you?"
   data-primary-color="#3b82f6"
