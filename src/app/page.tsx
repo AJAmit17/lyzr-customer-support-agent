@@ -20,10 +20,10 @@ export default function Home() {
               {isSignedIn ? (
                 <div className="flex items-center gap-4">
                   <Link
-                    href="/support"
+                    href="/demo"
                     className="text-green-600 hover:text-green-700 font-medium"
                   >
-                    Customer Support
+                    Demo
                   </Link>
                   <Link
                     href="/dashboard"
