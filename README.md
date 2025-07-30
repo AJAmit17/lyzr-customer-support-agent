@@ -38,7 +38,7 @@ A full-stack, plug-and-play customer support chat application built with Next.js
 
 ### Prerequisites
 - Node.js 18+ 
-- PostgreSQL database
+- MongoDB database
 - Lyzr API key ([Get one here](https://studio.lyzr.ai/))
 
 ### Installation
@@ -69,7 +69,7 @@ A full-stack, plug-and-play customer support chat application built with Next.js
    LYZR_BASE_URL=https://agent-prod.studio.lyzr.ai
    
    # Database
-   DATABASE_URL="postgresql://username:password@localhost:5432/lyzr_chat_support"
+   DATABASE_URL="mongodb+srv://username:password@localhost:5432/lyzr_chat_support"
    
    # Authentication (Clerk)
    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
@@ -83,8 +83,8 @@ A full-stack, plug-and-play customer support chat application built with Next.js
 
 4. **Set up the database**
    ```bash
-   npx prisma migrate dev --name init
    npx prisma generate
+   npx prisma db push
    ```
 
 5. **Start the development server**
