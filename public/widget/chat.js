@@ -1,6 +1,15 @@
 (function () {
   "use strict";
 
+  // Check if widget is already initialized to prevent conflicts
+  if (window.lyzrChatWidget) {
+    // Clean up existing widget
+    const existingWidget = document.querySelector('.lyzr-chat-widget')
+    if (existingWidget) {
+      existingWidget.remove()
+    }
+  }
+
   // Get the script tag and extract agent ID
   const currentScript =
     document.currentScript || document.querySelector("script[data-agent-id]");
@@ -14,10 +23,7 @@
   // Configuration
   const config = {
     agentId: agentId,
-    apiBaseUrl:
-      currentScript?.getAttribute("data-api-url") || 
-      (typeof window !== 'undefined' && window.location ? window.location.origin : '') ||
-      "http://localhost:3000",
+    apiBaseUrl: currentScript?.getAttribute("data-api-url"),
     position: currentScript?.getAttribute("data-position") || "bottom-right",
     primaryColor:
       currentScript?.getAttribute("data-primary-color") || "#007bff",
@@ -26,6 +32,12 @@
       currentScript?.getAttribute("data-subtitle") ||
       "How can we help you today?",
   };
+
+  // Validate required configuration
+  if (!config.apiBaseUrl) {
+    console.error("Lyzr Chat Widget: data-api-url attribute is required");
+    return;
+  }
 
   // Generate unique session ID
   function generateSessionId() {
@@ -319,6 +331,10 @@
         }),
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const data = await response.json();
 
       if (data.success) {
@@ -328,6 +344,8 @@
       }
     } catch (error) {
       console.error("Chat error:", error);
+      console.error("API URL:", config.apiBaseUrl);
+      console.error("Agent ID:", config.agentId);
       return "Sorry, I encountered an error. Please try again later.";
     }
   }
@@ -405,6 +423,12 @@
     });
 
     sendButton.addEventListener("click", handleSendMessage);
+
+    // Mark widget as initialized
+    window.lyzrChatWidget = {
+      agentId: config.agentId,
+      initialized: true
+    };
 
     console.log("Lyzr Chat Widget initialized for agent:", config.agentId);
   }

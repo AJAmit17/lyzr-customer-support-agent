@@ -87,7 +87,7 @@ export default function TicketManagement() {
 
     const fetchAgents = async () => {
         try {
-            const response = await fetch('/api/agent')
+            const response = await fetch('/api/agent/create')
             const data = await response.json()
             if (data.success) {
                 setAgents(data.agents || [])
@@ -257,12 +257,6 @@ export default function TicketManagement() {
                         >
                             <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
                             Refresh
-                        </Button>
-                        <Button
-                            onClick={() => window.location.href = '/dashboard'}
-                            variant="outline"
-                        >
-                            Back to Dashboard
                         </Button>
                     </div>
                 </div>

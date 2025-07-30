@@ -343,7 +343,6 @@ export default function Dashboard() {
                             onSelectAgent={setSelectedAgent}
                             onUpdateAgent={updateAgent}
                             onDeleteAgent={deleteAgent}
-                            onUploadDocument={uploadDocument}
                         />
                     </TabsContent>
 
@@ -388,26 +387,18 @@ function DashboardOverview({
     return (
         <div className="space-y-6">
             {/* Quick Actions */}
-            <Card>
+            {/* <Card>
                 <CardHeader>
                     <CardTitle>Quick Actions</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Button
                             onClick={() => window.location.href = '/setup'}
                             className="h-20 flex flex-col gap-2"
                         >
                             <span className="text-2xl">🚀</span>
                             <span>Create New Agent</span>
-                        </Button>
-                        <Button
-                            onClick={() => window.location.href = '/support'}
-                            variant="outline"
-                            className="h-20 flex flex-col gap-2"
-                        >
-                            <span className="text-2xl">🎯</span>
-                            <span>Test Support Portal</span>
                         </Button>
                         <Button
                             onClick={() => agents.length > 0 && onSelectAgent(agents[0])}
@@ -420,7 +411,7 @@ function DashboardOverview({
                         </Button>
                     </div>
                 </CardContent>
-            </Card>
+            </Card> */}
 
             {/* System Status */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -678,15 +669,13 @@ function AgentsList({
     selectedAgent,
     onSelectAgent,
     onUpdateAgent,
-    onDeleteAgent,
-    onUploadDocument
+    onDeleteAgent
 }: {
     agents: Agent[]
     selectedAgent: Agent | null
     onSelectAgent: (agent: Agent) => void
     onUpdateAgent: (agentId: string, updates: any) => Promise<boolean>
     onDeleteAgent: (agentId: string) => void
-    onUploadDocument: (agentId: string, file: File) => Promise<boolean>
 }) {
     const [editingAgent, setEditingAgent] = useState<Agent | null>(null)
     const [editForm, setEditForm] = useState({
@@ -715,12 +704,7 @@ function AgentsList({
         }
     }
 
-    const handleFileUpload = async (agentId: string, event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0]
-        if (file) {
-            await onUploadDocument(agentId, file)
-        }
-    }
+
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -872,13 +856,9 @@ function AgentsList({
                                                 </div>
                                             ))}
                                         </div>
-                                        <div className="mt-2">
-                                            <Input
-                                                type="file"
-                                                accept=".pdf,.docx,.csv,.txt"
-                                                onChange={(e) => handleFileUpload(selectedAgent.id, e)}
-                                            />
-                                        </div>
+                                        <p className="text-sm text-gray-500 mt-2">
+                                            To upload documents, use the Knowledge Base tab.
+                                        </p>
                                     </div>
                                 </div>
                             )}
@@ -985,7 +965,7 @@ function EmbedCode({ selectedAgent, onCopyEmbed }: { selectedAgent: Agent | null
                     </div>
                 </div>
 
-                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">  
+                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
                     <h4 className="font-medium text-yellow-900 mb-2">🎯 Testing Your Widget:</h4>
                     <p className="text-sm text-yellow-800 mb-2">
                         Test this agent&apos;s widget on the demo page or support portal:
@@ -1113,8 +1093,8 @@ function KnowledgeBaseManager({
                                     <div
                                         key={agent.id}
                                         className={`p-4 rounded-lg border cursor-pointer transition-all ${selectedAgent?.id === agent.id
-                                                ? 'border-blue-500 bg-blue-50 shadow-md'
-                                                : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+                                            ? 'border-blue-500 bg-blue-50 shadow-md'
+                                            : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
                                             }`}
                                         onClick={() => onSelectAgent(agent)}
                                     >
@@ -1176,8 +1156,8 @@ function KnowledgeBaseManager({
                                 {/* Upload Area */}
                                 <div
                                     className={`border-2 border-dashed rounded-lg p-8 text-center transition-all ${dragOver === selectedAgent.id
-                                            ? 'border-blue-400 bg-blue-50'
-                                            : 'border-gray-300 hover:border-gray-400'
+                                        ? 'border-blue-400 bg-blue-50'
+                                        : 'border-gray-300 hover:border-gray-400'
                                         } ${uploadingFiles[selectedAgent.id] ? 'opacity-50' : ''}`}
                                     onDrop={(e) => handleDrop(e, selectedAgent.id)}
                                     onDragOver={(e) => handleDragOver(e, selectedAgent.id)}

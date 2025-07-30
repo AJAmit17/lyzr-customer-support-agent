@@ -31,8 +31,8 @@ export async function POST(request: NextRequest) {
             system_prompt: system_prompt,
             description: description || '',
             template_type: 'single_task',
-            agent_role: system_prompt,
-            agent_instructions: 'Your task is to assist users with their customer support queries.',
+            agent_role: "Your task is to assist users with their customer support queries.",
+            agent_instructions: system_prompt,
             provider_id: 'OpenAI',
             model: 'gpt-4o-mini',
             temperature: temperature || 0.7,
@@ -47,7 +47,6 @@ export async function POST(request: NextRequest) {
             llm_credential_id: 'lyzr_openai'
         })
 
-        // eslint-disable-next-line no-console
         console.log('Lyzr Agent Response:', JSON.stringify(lyzrAgent, null, 2))
 
         // Extract agent ID from response - check different possible response structures
@@ -55,10 +54,10 @@ export async function POST(request: NextRequest) {
         if (typeof lyzrAgent === 'object' && lyzrAgent !== null) {
             // Try different possible field names for the agent ID
             const response = lyzrAgent as Record<string, unknown>
-            agentId = (response.id as string) || 
-                     (response.agent_id as string) || 
-                     ((response.data as Record<string, unknown>)?.id as string) || 
-                     ((response.agent as Record<string, unknown>)?.id as string)
+            agentId = (response.id as string) ||
+                (response.agent_id as string) ||
+                ((response.data as Record<string, unknown>)?.id as string) ||
+                ((response.agent as Record<string, unknown>)?.id as string)
         } else {
             agentId = lyzrAgent as string
         }

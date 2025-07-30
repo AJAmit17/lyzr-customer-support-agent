@@ -2,6 +2,25 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { lyzrApi } from '@/lib/lyzr'
 
+// CORS headers
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With, Accept, Origin',
+    'Access-Control-Allow-Credentials': 'false',
+}
+
+// Handle CORS preflight requests
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 200,
+        headers: {
+            ...corsHeaders,
+            'Access-Control-Max-Age': '86400',
+        },
+    })
+}
+
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
@@ -10,7 +29,10 @@ export async function POST(request: NextRequest) {
         if (!agent_id || !session_id || !message) {
             return NextResponse.json(
                 { error: 'Missing required fields: agent_id, session_id, message' },
-                { status: 400 }
+                {
+                    status: 400,
+                    headers: corsHeaders
+                }
             )
         }
 
@@ -22,7 +44,10 @@ export async function POST(request: NextRequest) {
         if (!agent) {
             return NextResponse.json(
                 { error: 'Agent not found' },
-                { status: 404 }
+                {
+                    status: 404,
+                    headers: corsHeaders
+                }
             )
         }
 
@@ -83,13 +108,18 @@ Your query has been logged in our system and our support team can track your cas
             ticket_id: ticket.id,
             session_id,
             agent_id
+        }, {
+            headers: corsHeaders
         })
 
     } catch (error) {
         console.error('Error in chat:', error)
         return NextResponse.json(
             { error: 'Failed to process chat', details: error instanceof Error ? error.message : 'Unknown error' },
-            { status: 500 }
+            {
+                status: 500,
+                headers: corsHeaders
+            }
         )
     }
 }
