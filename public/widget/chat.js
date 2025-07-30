@@ -337,7 +337,7 @@
         ipAddress: null, // Would need server-side detection
       };
 
-      const response = await fetch(`${config.apiBaseUrl}/api/chat`, {
+      const response = await fetch(`${config.apiBaseUrl}/api/public/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

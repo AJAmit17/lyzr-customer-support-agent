@@ -304,8 +304,6 @@ export default function AIAgentWorkflow() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
-                                        <SelectItem value="gpt-4o">GPT-4o</SelectItem>
-                                        <SelectItem value="gpt-3.5-turbo">GPT-3.5 Turbo</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
