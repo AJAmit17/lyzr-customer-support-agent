@@ -15,7 +15,7 @@ A full-stack, plug-and-play customer support chat application built with Next.js
 - **Real-time Agent Updates**: Modify agent behavior without downtime
 
 ### 📚 Knowledge Base Integration
-- **Multi-format Support**: Upload PDF, DOCX, CSV, and text files
+- **PDF-format Support**: Upload PDF files.
 - **URL Integration**: Add web pages as knowledge sources
 - **Dynamic Updates**: Add/remove knowledge sources anytime
 
