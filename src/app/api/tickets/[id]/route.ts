@@ -3,12 +3,12 @@ import { prisma } from '@/lib/prisma'
 
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const body = await request.json()
         const { status } = body
-        const ticketId = params.id
+        const { id: ticketId } = await params
 
         if (!status) {
             return NextResponse.json(
@@ -73,10 +73,10 @@ export async function PUT(
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const ticketId = params.id
+        const { id: ticketId } = await params
 
         const ticket = await prisma.ticket.findUnique({
             where: { id: ticketId },

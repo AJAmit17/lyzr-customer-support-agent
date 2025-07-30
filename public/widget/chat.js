@@ -36,6 +36,25 @@
   // Validate required configuration
   if (!config.apiBaseUrl) {
     console.error("Lyzr Chat Widget: data-api-url attribute is required");
+    console.error("Example usage:");
+    console.error('<script src="https://yourdomain.com/widget/chat.js" data-agent-id="agent123" data-api-url="https://yourdomain.com"></script>');
+    return;
+  }
+
+  // Normalize API URL (remove trailing slash)
+  config.apiBaseUrl = config.apiBaseUrl.replace(/\/$/, '');
+
+  // Handle protocol-relative URLs
+  if (config.apiBaseUrl.startsWith('//')) {
+    config.apiBaseUrl = window.location.protocol + config.apiBaseUrl;
+  }
+
+  // Validate API URL format
+  try {
+    new URL(config.apiBaseUrl);
+  } catch {
+    console.error("Lyzr Chat Widget: Invalid data-api-url format:", config.apiBaseUrl);
+    console.error("Please provide a valid URL like: https://yourdomain.com");
     return;
   }
 
