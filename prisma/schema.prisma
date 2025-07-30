@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id        String   @id @map("_id") // Remove @default(auto()) and @db.ObjectId to allow custom string IDs
+    email     String   @unique
+    name      String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    agents Agent[]
+
+    @@map("users")
+}
+
+model Agent {
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    lyzrAgentId  String   @unique // Lyzr API agent ID
+    name         String
+    description  String?
+    systemPrompt String
+    temperature  Float    @default(0.7)
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    userId String // Remove @db.ObjectId to match User.id type
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    kbAssets AssetLink[]
+    tickets  Ticket[]
+
+    @@map("agents")
+}
+
+model AssetLink {
+    id         String   @id @default(auto()) @map("_id") @db.ObjectId
+    assetId    String // Lyzr API asset ID
+    fileName   String?
+    fileType   String?
+    uploadedAt DateTime @default(now())
+
+    agentId String @db.ObjectId
+    agent   Agent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+    @@map("asset_links")
+}
+
+model Ticket {
+    id         String       @id @default(auto()) @map("_id") @db.ObjectId
+    sessionId  String
+    userInput  String
+    agentReply String
+    status     TicketStatus @default(OPEN)
+    priority   Priority     @default(MEDIUM)
+    resolvedAt DateTime?
+    createdAt  DateTime     @default(now())
+    updatedAt  DateTime     @updatedAt
+
+    agentId String @db.ObjectId
+    agent   Agent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+    visitor Visitor? @relation(fields: [sessionId], references: [sessionId])
+
+    @@map("tickets")
+}
+
+model Visitor {
+    sessionId String   @id @map("_id")
+    name      String?
+    email     String?
+    userAgent String?
+    ipAddress String?
+    createdAt DateTime @default(now())
+
+    tickets Ticket[]
+
+    @@map("visitors")
+}
+
+enum TicketStatus {
+    OPEN
+    CLOSED
+    PENDING
+    RESOLVED
+    ESCALATED
+}
+
+enum Priority {
+    LOW
+    MEDIUM
+    HIGH
+    URGENT
+}
